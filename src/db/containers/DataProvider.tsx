@@ -19,7 +19,7 @@ export const DataProvider = ({ children }: Props) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const appId = process.env.REACT_APP_USERBASE_APP_ID ?? window.location.pathname.substr(1) ?? ''
+    const appId = process.env.REACT_APP_USERBASE_APP_ID || new URLSearchParams(window.location.search).get('id') || ''
     if (appId.length === 36) {
       dispatch(dbInitInProgress())
       userbase

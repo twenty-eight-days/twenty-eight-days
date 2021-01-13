@@ -1,0 +1,1 @@
+export const UPDATE_AUTH_STATE = 'db/UPDATE_AUTH_STATE'

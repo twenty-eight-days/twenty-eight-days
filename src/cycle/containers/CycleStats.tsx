@@ -3,7 +3,7 @@ import * as React from 'react'
 import { useState } from 'react'
 import useInterval from '@use-it/interval'
 import { useTypedSelector } from '../../store'
-import { Cycle, CycleHistory } from '../model'
+import { CycleHistory } from '../model'
 import startOfToday from 'date-fns/startOfToday'
 import { differenceInDays } from 'date-fns'
 
@@ -16,8 +16,6 @@ export const medianCycleLength = (durations: ReadonlyArray<number>) => {
   return median(durations)
 }
 
-export const cycleDurations = (cycles: ReadonlyArray<Cycle>) => cycles.map((c) => c.duration)
-
 export const CycleStats = () => {
   const [today, setToday] = useState<number>(startOfToday().valueOf())
 
@@ -27,14 +25,11 @@ export const CycleStats = () => {
 
   const history = useTypedSelector<CycleHistory | undefined>((s) => s.cycle.history)
   if (history) {
-    const durations = cycleDurations(history.pastCycles)
     const lastStartDate = history.currentCycle.startDate
-    const median = medianCycleLength(durations)
+    const median = medianCycleLength(history.pastCycles.map((c) => c.duration))
     const daysPast = differenceInDays(today, lastStartDate)
     const day = Math.floor(daysPast) + 1 // start date is cycle day 1
-    return (
-      <CycleStatsComponent currentDay={day} median={median} lastStartDate={lastStartDate} cycleDurations={durations} />
-    )
+    return <CycleStatsComponent currentDay={day} median={median} lastStartDate={lastStartDate} cycleHistory={history} />
   } else {
     return <div />
   }

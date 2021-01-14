@@ -2,6 +2,7 @@ import React from 'react'
 import { histogram, max, min } from 'd3-array'
 import { scaleLinear } from 'd3-scale'
 import { makeStyles, Theme } from '@material-ui/core/styles'
+import { CycleHistory } from '../model'
 
 const useStyles = makeStyles((theme: Theme) => ({
   bar: {
@@ -33,14 +34,16 @@ interface Props {
   readonly height: number
   readonly currentDay: number
   readonly median: number
-  readonly cycleDurations: ReadonlyArray<number>
+  readonly cycleHistory: CycleHistory
 }
 
-export const CycleDurationHistogram = ({ width, height, currentDay, median, cycleDurations }: Props) => {
+export const CycleDurationHistogram = ({ width, height, currentDay, median, cycleHistory }: Props) => {
   const classes = useStyles()
 
   const marginTop = 10
   const marginBottom = 20
+
+  const cycleDurations = cycleHistory.pastCycles.map((c) => c.duration)
 
   const binMin = min(cycleDurations) ?? 20
   const binMax = max(cycleDurations) ?? 35

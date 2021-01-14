@@ -2,6 +2,7 @@ import { CycleDescription } from './CycleDescription'
 import { CycleDurationHistogram } from './CycleDurationHistogram'
 import * as React from 'react'
 import { makeStyles, Theme } from '@material-ui/core/styles'
+import { CycleHistory } from '../model'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -16,10 +17,10 @@ interface Props {
   readonly currentDay: number
   readonly median: number
   readonly lastStartDate: number
-  readonly cycleDurations: ReadonlyArray<number>
+  readonly cycleHistory: CycleHistory
 }
 
-export const CycleStats = ({ currentDay, median, lastStartDate, cycleDurations }: Props) => {
+export const CycleStats = ({ currentDay, median, lastStartDate, cycleHistory }: Props) => {
   const classes = useStyles()
   return (
     <div className={classes.root}>
@@ -29,7 +30,7 @@ export const CycleStats = ({ currentDay, median, lastStartDate, cycleDurations }
         height={150}
         currentDay={currentDay}
         median={median}
-        cycleDurations={cycleDurations}
+        cycleHistory={cycleHistory}
       />
     </div>
   )

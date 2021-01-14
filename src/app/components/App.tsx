@@ -50,6 +50,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     gridTemplateRows: 'auto 1fr auto',
     gridRowGap: 8,
     paddingTop: 100,
+    paddingBottom: 100,
     paddingLeft: '20vw',
     paddingRight: '20vw',
     [theme.breakpoints.down('sm')]: {

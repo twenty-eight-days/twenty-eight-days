@@ -24,12 +24,24 @@ export const CycleStats = () => {
   }, 1000 * 60)
 
   const history = useTypedSelector<CycleHistory | undefined>((s) => s.cycle.history)
+  const userName = useTypedSelector<string>((s) => {
+    const authState = s.database.authState
+    return authState.type === 'logged-in' ? authState.user.username : ''
+  })
   if (history) {
     const lastStartDate = history.currentCycle.startDate
     const median = medianCycleLength(history.pastCycles.map((c) => c.duration))
     const daysPast = differenceInDays(today, lastStartDate)
     const day = Math.floor(daysPast) + 1 // start date is cycle day 1
-    return <CycleStatsComponent currentDay={day} median={median} lastStartDate={lastStartDate} cycleHistory={history} />
+    return (
+      <CycleStatsComponent
+        userName={userName}
+        currentDay={day}
+        median={median}
+        lastStartDate={lastStartDate}
+        cycleHistory={history}
+      />
+    )
   } else {
     return <div />
   }

@@ -3,11 +3,19 @@ import { histogram, max, min } from 'd3-array'
 import { scaleLinear } from 'd3-scale'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { CycleHistory } from '../model'
+import { barOpacity, fontSizeAdjust } from './shared'
+import { Typography } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    display: 'grid',
+    width: '100%',
+    height: '100%',
+    justifyItems: 'center',
+  },
   bar: {
     fill: theme.palette.primary.main,
-    opacity: 0.5,
+    opacity: barOpacity,
     strokeWidth: 1,
     stroke: theme.palette.background.default,
   },
@@ -24,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   text: {
     fill: theme.palette.text.primary,
     textAnchor: 'middle',
-    fontSizeAdjust: 0.4,
+    fontSizeAdjust,
     dominantBaseline: 'central',
   },
 }))
@@ -64,35 +72,46 @@ export const CycleDurationHistogram = ({ width, height, currentDay, median, cycl
   const medianX = x(median + 0.5)
 
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} width={width} height={height}>
-      <line className={classes.line} x1={medianX} x2={medianX} y1={marginTop / 2} y2={height - marginBottom / 2 - 5} />
-      <text className={classes.text} x={medianX} y={height - marginBottom / 2}>
-        {median}
-      </text>
-      {bins.map((b, i) => {
-        const h = y(0) - y(b.length)
-        return (
-          <g key={`bin-${i}`}>
-            <rect
-              className={`${classes.bar}, ${classes.barBackdrop}`}
-              x={x(b.x0!)}
-              y={y(b.length)}
-              width={binWidth}
-              height={h}
-            />
-            <rect className={classes.bar} x={x(b.x0!)} y={y(b.length)} width={binWidth} height={h} />
-          </g>
-        )
-      })}
-      {currentDayBin && (
-        <circle
-          className={classes.dot}
-          cx={x(currentDay + 0.5)}
-          cy={y(currentDayBin.length) - binWidth / 2}
-          r={binWidth / 3}
-          strokeWidth={0}
+    <div className={classes.root}>
+      <svg viewBox={`0 0 ${width} ${height}`} width={width} height={height}>
+        <line
+          className={classes.line}
+          x1={medianX}
+          x2={medianX}
+          y1={marginTop / 2}
+          y2={height - marginBottom / 2 - 5}
         />
-      )}
-    </svg>
+        <text className={classes.text} x={medianX} y={height - marginBottom / 2}>
+          {median}
+        </text>
+        {bins.map((b, i) => {
+          const h = y(0) - y(b.length)
+          return (
+            <g key={`bin-${i}`}>
+              <rect
+                className={`${classes.bar}, ${classes.barBackdrop}`}
+                x={x(b.x0!)}
+                y={y(b.length)}
+                width={binWidth}
+                height={h}
+              />
+              <rect className={classes.bar} x={x(b.x0!)} y={y(b.length)} width={binWidth} height={h} />
+            </g>
+          )
+        })}
+        {currentDayBin && (
+          <circle
+            className={classes.dot}
+            cx={x(currentDay + 0.5)}
+            cy={y(currentDayBin.length) - binWidth / 2}
+            r={binWidth / 3}
+            strokeWidth={0}
+          />
+        )}
+      </svg>
+      <Typography variant={'body1'} align={'center'}>
+        Your <b>median cycle</b> length is {median} days.
+      </Typography>
+    </div>
   )
 }

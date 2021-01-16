@@ -1,19 +1,28 @@
 import React from 'react'
-import { CycleHistory } from '../model'
+import { Cycle, CycleHistory } from '../model'
 import { BarItemProps, ResponsiveBar } from '@nivo/bar'
-import { fade, makeStyles } from '@material-ui/core/styles'
-import { barOpacity } from './shared'
-import { useTheme } from '@material-ui/core'
+import { lighten, makeStyles } from '@material-ui/core/styles'
+import { barLighteningCoefficient, fd } from './shared'
+import { Theme, useTheme } from '@material-ui/core'
+import { addDays } from 'date-fns'
 
-const useStyles = makeStyles({
-  root: (height: number) => ({ width: '100%', maxWidth: '40vw', height }),
+interface BarDatum {
+  readonly id: string
+  readonly value: Cycle
+}
+
+const fontSize = 9
+
+const useStyles = makeStyles((theme: Theme) => ({
+  root: (height: number) => ({ width: '100%', height }),
   label: {
+    fill: theme.palette.text.primary,
     dominantBaseline: 'central',
-    fontSize: 9,
+    fontSize,
   },
-})
+}))
 
-const barWidth = 6.1 // approximate histogram bar width
+const barWidth = 15
 const barPadding = 0.2
 const labelPadding = 2
 
@@ -27,7 +36,7 @@ export const CycleBarChart = ({ cycleHistory }: Props) => {
   const classes = useStyles(height)
   const theme = useTheme()
 
-  const CustomLabels = ({ bars }: { bars: BarItemProps[] }) => {
+  const customBarLabels = ({ bars }: { bars: BarItemProps[] }) => {
     const labels = bars.map(({ data, x, y, width, height }) => {
       return (
         <text
@@ -44,20 +53,37 @@ export const CycleBarChart = ({ cycleHistory }: Props) => {
     return <g>{labels}</g>
   }
 
-  const data = [...pastCycles].reverse()
+  const toAxisLabel = (c: Cycle) => {
+    const startDate = fd(c.startDate)
+    switch (c.type) {
+      case 'past':
+        const endDate = fd(addDays(c.startDate, c.duration))
+        return `${startDate} - ${endDate}`
+      default:
+        return `${startDate} - ...`
+    }
+  }
+
+  const data = [...pastCycles].reverse().map<BarDatum>((c) => ({
+    id: toAxisLabel(c),
+    value: c,
+    duration: c.duration,
+  }))
 
   return (
     <div className={classes.root}>
       <ResponsiveBar
         data={data}
         keys={['duration']}
-        colors={[fade(theme.palette.primary.main, barOpacity)]}
+        colors={[lighten(theme.palette.primary.main, barLighteningCoefficient)]}
         layout={'horizontal'}
-        padding={0.2}
+        padding={barPadding}
         enableGridY={false}
-        layers={['axes', 'bars', CustomLabels]}
-        margin={{ top: 0, right: 15, bottom: 0, left: 0 }}
-        label={() => ''}
+        isInteractive={false} // disable tooltips
+        layers={['axes', 'bars', customBarLabels]}
+        margin={{ top: 0, right: 12, bottom: 0, left: 115 }}
+        label={() => ''} // disable default labels
+        theme={{ fontSize, textColor: theme.palette.text.primary }}
       />
     </div>
   )

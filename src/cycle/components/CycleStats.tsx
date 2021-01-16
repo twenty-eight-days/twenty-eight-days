@@ -4,6 +4,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles'
 import { CycleHistory } from '../model'
 import { CycleDurationHistogram } from './CycleDurationHistogram'
 import { CycleBarChart } from './CycleBarChart'
+import { Typography } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -29,7 +30,12 @@ export const CycleStats = ({ userName, currentDay, median, lastStartDate, cycleH
   return (
     <div className={classes.root}>
       <CycleDescription userName={userName} currentDay={currentDay} median={median} lastStartDate={lastStartDate} />
-      <Divider text={'Histogram'} />
+      <Divider text={'Past Cycles'} />
+      <Typography variant={'body1'} align={'center'}>
+        Your <b>median cycle</b> length is {median} days.
+      </Typography>
+      <CycleBarChart cycleHistory={cycleHistory} />
+      <Divider text={'Duration Histogram'} />
       <CycleDurationHistogram
         width={200}
         height={150}
@@ -37,8 +43,6 @@ export const CycleStats = ({ userName, currentDay, median, lastStartDate, cycleH
         median={median}
         cycleHistory={cycleHistory}
       />
-      <Divider text={'Bar Chart'} />
-      <CycleBarChart cycleHistory={cycleHistory} />
     </div>
   )
 }

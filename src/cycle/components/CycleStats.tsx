@@ -34,7 +34,7 @@ export const CycleStats = ({ userName, currentDay, median, lastStartDate, cycleH
       <Typography variant={'body1'} align={'center'}>
         Your <b>median cycle</b> length is {median} days.
       </Typography>
-      <CycleBarChart cycleHistory={cycleHistory} />
+      <CycleBarChart cycleHistory={cycleHistory} median={median} />
       <Divider text={'Duration Histogram'} />
       <CycleDurationHistogram
         width={200}

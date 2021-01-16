@@ -5,6 +5,7 @@ import { lighten, makeStyles } from '@material-ui/core/styles'
 import { barLighteningCoefficient, fd } from './shared'
 import { Theme, useTheme } from '@material-ui/core'
 import { addDays } from 'date-fns'
+import { CartesianMarkerProps } from '@nivo/core'
 
 interface CycleBarDatum {
   readonly id: string
@@ -25,13 +26,14 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const barWidth = 15
 const barPadding = 0.2
-const labelPadding = 2
+const labelPadding = -12
 
 interface Props {
   readonly cycleHistory: CycleHistory
+  readonly median: number
 }
 
-export const CycleBarChart = ({ cycleHistory }: Props) => {
+export const CycleBarChart = ({ cycleHistory, median }: Props) => {
   const pastCycles = cycleHistory.pastCycles
   const height = barWidth * (1 + barPadding) * pastCycles.length
   const classes = useStyles(height)
@@ -62,6 +64,12 @@ export const CycleBarChart = ({ cycleHistory }: Props) => {
     return <g>{labels}</g>
   }
 
+  const medianMarker: CartesianMarkerProps = {
+    axis: 'x',
+    value: median,
+    lineStyle: { stroke: theme.palette.secondary.main, strokeWidth: 0.5 },
+  }
+
   return (
     <div className={classes.root}>
       <ResponsiveBar
@@ -72,10 +80,11 @@ export const CycleBarChart = ({ cycleHistory }: Props) => {
         padding={barPadding}
         enableGridY={false}
         isInteractive={false} // disable tooltips
-        layers={['axes', 'bars', currentCycleLabel]}
-        margin={{ top: 0, right: 12, bottom: 0, left: 115 }}
+        layers={['markers', 'axes', 'bars', currentCycleLabel]}
+        margin={{ top: 0, right: 0, bottom: 0, left: 115 }}
         label={() => ''} // disable default labels
         theme={{ fontSize, textColor: theme.palette.text.primary }}
+        markers={[medianMarker]}
       />
     </div>
   )

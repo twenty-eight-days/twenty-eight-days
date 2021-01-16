@@ -1,14 +1,15 @@
 import React from 'react'
 import { Cycle, CycleHistory } from '../model'
-import { BarItemProps, ResponsiveBar } from '@nivo/bar'
+import { BarDatum, BarItemProps, ResponsiveBar } from '@nivo/bar'
 import { lighten, makeStyles } from '@material-ui/core/styles'
 import { barLighteningCoefficient, fd } from './shared'
 import { Theme, useTheme } from '@material-ui/core'
 import { addDays } from 'date-fns'
 
-interface BarDatum {
+interface CycleBarDatum {
   readonly id: string
-  readonly value: Cycle
+  readonly currentDuration: number
+  readonly pastDuration: number
 }
 
 const fontSize = 9
@@ -36,55 +37,57 @@ export const CycleBarChart = ({ cycleHistory }: Props) => {
   const classes = useStyles(height)
   const theme = useTheme()
 
-  const customBarLabels = ({ bars }: { bars: BarItemProps[] }) => {
+  const cycles = [cycleHistory.currentCycle, ...pastCycles].reverse().map<CycleBarDatum>((c) => ({
+    id: toAxisLabel(c),
+    currentDuration: c.type === 'current' ? c.duration + 1 : 0,
+    pastDuration: c.type === 'past' ? c.duration : 0,
+  }))
+
+  const currentCycleLabel = ({ bars }: { bars: BarItemProps[] }) => {
     const labels = bars.map(({ data, x, y, width, height }) => {
+      const barDatum: BarDatum = data.data
       return (
         <text
           className={classes.label}
-          key={data.index}
+          key={`${data.id}/${data.index}`}
           x={x}
           y={y}
           transform={`translate(${width + labelPadding},${height / 2})`}
         >
-          {data.value}
+          {data.id === 'currentDuration' && data.index === cycles.length - 1 ? barDatum.currentDuration : ''}
+          {data.id === 'pastDuration' && data.index <= cycles.length ? barDatum.pastDuration : ''}
         </text>
       )
     })
     return <g>{labels}</g>
   }
 
-  const toAxisLabel = (c: Cycle) => {
-    const startDate = fd(c.startDate)
-    switch (c.type) {
-      case 'past':
-        const endDate = fd(addDays(c.startDate, c.duration))
-        return `${startDate} - ${endDate}`
-      default:
-        return `${startDate} - ...`
-    }
-  }
-
-  const data = [...pastCycles].reverse().map<BarDatum>((c) => ({
-    id: toAxisLabel(c),
-    value: c,
-    duration: c.duration,
-  }))
-
   return (
     <div className={classes.root}>
       <ResponsiveBar
-        data={data}
-        keys={['duration']}
-        colors={[lighten(theme.palette.primary.main, barLighteningCoefficient)]}
+        data={cycles}
+        keys={['currentDuration', 'pastDuration']}
+        colors={['lavender', lighten(theme.palette.primary.main, barLighteningCoefficient)]}
         layout={'horizontal'}
         padding={barPadding}
         enableGridY={false}
         isInteractive={false} // disable tooltips
-        layers={['axes', 'bars', customBarLabels]}
+        layers={['axes', 'bars', currentCycleLabel]}
         margin={{ top: 0, right: 12, bottom: 0, left: 115 }}
         label={() => ''} // disable default labels
         theme={{ fontSize, textColor: theme.palette.text.primary }}
       />
     </div>
   )
+}
+
+function toAxisLabel(c: Cycle) {
+  const startDate = fd(c.startDate)
+  switch (c.type) {
+    case 'past':
+      const endDate = fd(addDays(c.startDate, c.duration))
+      return `${startDate} - ${endDate}`
+    default:
+      return `${startDate} - __.__.____`
+  }
 }

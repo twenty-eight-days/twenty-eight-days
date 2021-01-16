@@ -2,14 +2,14 @@ import React from 'react'
 import { CycleHistory } from '../model'
 import { BarItemProps, ResponsiveBar } from '@nivo/bar'
 import { fade, makeStyles } from '@material-ui/core/styles'
-import { barOpacity, fontSizeAdjust } from './shared'
+import { barOpacity } from './shared'
 import { useTheme } from '@material-ui/core'
 
 const useStyles = makeStyles({
   root: (height: number) => ({ width: '100%', maxWidth: '40vw', height }),
   label: {
     dominantBaseline: 'central',
-    fontSizeAdjust,
+    fontSize: 9,
   },
 })
 

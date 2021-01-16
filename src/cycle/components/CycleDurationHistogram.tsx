@@ -3,7 +3,7 @@ import { histogram, max, min } from 'd3-array'
 import { scaleLinear } from 'd3-scale'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { CycleHistory } from '../model'
-import { barOpacity, fontSizeAdjust } from './shared'
+import { barOpacity } from './shared'
 import { Typography } from '@material-ui/core'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   text: {
     fill: theme.palette.text.primary,
     textAnchor: 'middle',
-    fontSizeAdjust,
+    fontSize: 9,
     dominantBaseline: 'central',
   },
 }))

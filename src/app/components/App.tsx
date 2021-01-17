@@ -4,8 +4,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import { ThemeSwitch } from '../../theme'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { ExportCycleData } from '../../cycle'
-import { IconButton, Theme, Typography } from '@material-ui/core'
-import RefreshIcon from '@material-ui/icons/Refresh'
+import { Theme, Typography } from '@material-ui/core'
 import { Main } from '../containers/Main'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -67,7 +66,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export const App = () => {
   const classes = useStyles()
-  const onRefresh = () => window.location.reload()
 
   return (
     <div className="App">
@@ -75,9 +73,6 @@ export const App = () => {
         <Toolbar className={classes.toolbar}>
           <div className={classes.toolbarLeft}>
             <ExportCycleData />
-            <IconButton color="inherit" onClick={onRefresh}>
-              <RefreshIcon />
-            </IconButton>
           </div>
           <div className={classes.toolbarCenter}>
             <Typography

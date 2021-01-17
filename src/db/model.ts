@@ -8,20 +8,7 @@ export interface DatabaseState {
   readonly authState: AuthState
 }
 
-export type AuthState = NoAppId | DbInitInProgress | DbInitFailed | DisplayLoginForm | LoginState
-
-export interface NoAppId {
-  type: 'no-app-id'
-}
-
-export interface DbInitInProgress {
-  type: 'db-init-in-progress'
-}
-
-export interface DbInitFailed {
-  type: 'db-init-failed'
-  error: any
-}
+export type AuthState = DisplayLoginForm | DbInitInProgress | DbInitFailed | LoginState
 
 export interface DisplayLoginForm {
   type: 'login-form'
@@ -38,14 +25,26 @@ export interface LoginFormSubmitted {
   type: 'login-form-submitted'
 }
 
+export type LoginFormField = 'appId' | 'credentials'
+
 export interface LoginFormError {
   type: 'login-form-error'
-  error: any
+  field: LoginFormField
+  error: string
 }
 
 export interface LoginState {
   type: 'logged-in'
   user: UserResult
+}
+
+export interface DbInitInProgress {
+  type: 'db-init-in-progress'
+}
+
+export interface DbInitFailed {
+  type: 'db-init-failed'
+  error: any
 }
 
 /* ·················································································································· */

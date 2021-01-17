@@ -1,4 +1,4 @@
-import { cycleDurations, medianCycleLength } from './CycleStats'
+import { medianCycleLength } from './CycleStats'
 import { DATE_FORMAT_IMPORT_EXPORT } from '../utils'
 import { cycleHistory } from '../reducer'
 import { CycleId } from '../../db'
@@ -11,7 +11,7 @@ it('medianCycleLength', () => {
     startDate: parse(d, DATE_FORMAT_IMPORT_EXPORT, new Date()).valueOf(),
   }))
   const history = cycleHistory(dates)
-  const durations = cycleDurations(history.pastCycles)
+  const durations = history.pastCycles.map((c) => c.duration)
   expect(durations).toEqual([31, 29])
   expect(medianCycleLength(durations)).toEqual(30)
 })

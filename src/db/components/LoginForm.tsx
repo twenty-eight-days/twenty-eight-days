@@ -17,22 +17,37 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface Props {
   state: LoginFormState
-  onSubmit: (username: string, password: string) => void
+  onSubmit: (appId: string, username: string, password: string) => void
 }
 
 export const LoginForm = ({ state, onSubmit }: Props) => {
   const classes = useStyles()
 
+  const [appId, setAppId] = useState<string>(process.env.REACT_APP_USERBASE_APP_ID ?? '')
   const [username, setUsername] = useState<string>(process.env.REACT_APP_USERBASE_USERNAME ?? '')
   const [password, setPassword] = useState<string>(process.env.REACT_APP_USERBASE_PASSWORD ?? '')
   const isSubmitted = state.type === 'login-form-submitted'
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    onSubmit(username, password)
+    onSubmit(appId, username, password)
   }
+
+  const isInvalidCredentials = state.type === 'login-form-error' && state.field === 'credentials'
+
   return (
     <form className={classes.root} noValidate={true} autoComplete="off" onSubmit={handleSubmit}>
+      <TextField
+        id="appId"
+        variant={'outlined'}
+        fullWidth={true}
+        label="App Id"
+        type={'password'}
+        value={appId}
+        onChange={(event) => setAppId(event.target.value)}
+        disabled={isSubmitted}
+        error={state.type === 'login-form-error' && state.field === 'appId'}
+      />
       <TextField
         id="username"
         variant={'outlined'}
@@ -41,6 +56,7 @@ export const LoginForm = ({ state, onSubmit }: Props) => {
         value={username}
         onChange={(event) => setUsername(event.target.value)}
         disabled={isSubmitted}
+        error={isInvalidCredentials}
       />
       <TextField
         id="password"
@@ -51,10 +67,13 @@ export const LoginForm = ({ state, onSubmit }: Props) => {
         value={password}
         onChange={(event) => setPassword(event.target.value)}
         disabled={isSubmitted}
+        error={isInvalidCredentials}
       />
       <Button
         className={classes.button}
-        disabled={isSubmitted || username.trim().length === 0 || password.trim().length === 0}
+        disabled={
+          isSubmitted || appId.trim().length === 0 || username.trim().length === 0 || password.trim().length === 0
+        }
         type="submit"
         variant={'contained'}
         color="primary"

@@ -1,5 +1,5 @@
 import { UPDATE_AUTH_STATE } from './actionTypes'
-import { AuthState, LoginState, LoginFormState, CycleId } from './model'
+import { AuthState, LoginState, LoginFormState, CycleId, LoginFormField } from './model'
 import userbase, { UserResult } from 'userbase-js'
 
 export type DatabaseAction = UpdateAuthStateAction
@@ -14,26 +14,15 @@ const updateAuthState = (authState: AuthState): UpdateAuthStateAction => ({
   authState,
 })
 
-export const dbInitInProgress = () =>
-  updateAuthState({
-    type: 'db-init-in-progress',
-  })
-
-export const dbInitFailed = (error: any) =>
-  updateAuthState({
-    type: 'db-init-failed',
-    error,
-  })
-
 const updateLoginForm = (state: LoginFormState) =>
   updateAuthState({
     type: 'login-form',
     state,
   })
 
-export const showLoginForm = () => updateLoginForm({ type: 'login-form-idle' })
 export const loginFormSubmitted = () => updateLoginForm({ type: 'login-form-submitted' })
-export const loginFormError = (error: any) => updateLoginForm({ type: 'login-form-error', error })
+export const loginFormError = (error: string, field: LoginFormField) =>
+  updateLoginForm({ type: 'login-form-error', field, error })
 
 export const loginSuccessful = (user: UserResult) =>
   updateAuthState({

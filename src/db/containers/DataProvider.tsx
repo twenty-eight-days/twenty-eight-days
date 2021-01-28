@@ -14,7 +14,7 @@ export const DataProvider = ({ children }: Props) => {
   const loginState = useTypedSelector((s) => s.database.authState)
   const dispatch = useDispatch()
   useEffect(() => {
-    if (loginState.type === 'logged-in') {
+    if (loginState.type === 'logged-in' && loginState.user.type === 'db') {
       const databaseName = cycleDatabaseName(loginState)
       console.log(`DB openDatabase ${databaseName} ...`)
       userbase

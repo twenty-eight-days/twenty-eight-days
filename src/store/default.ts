@@ -1,10 +1,13 @@
 import { defaultThemeState } from '../theme'
 import { RootState } from './model'
-import { defaultCycleState } from '../cycle'
-import { defaultDatabaseState } from '../db'
+import { defaultCycleState, demoCycleState } from '../cycle'
+import { defaultDatabaseState, demoDatabaseState } from '../db'
+
+const query = new URLSearchParams(window.location.search)
+const isDemoMode = query.has('demo')
 
 export const defaultRootState: RootState = {
-  database: defaultDatabaseState,
+  database: isDemoMode ? demoDatabaseState : defaultDatabaseState,
   theme: defaultThemeState,
-  cycle: defaultCycleState,
+  cycle: isDemoMode ? demoCycleState : defaultCycleState,
 }

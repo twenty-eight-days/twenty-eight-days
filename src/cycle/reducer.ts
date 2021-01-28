@@ -1,12 +1,11 @@
 import { CycleHistory, CycleState, PastCycle, RawCycle } from './model'
-import { defaultCycleState } from './default'
 import { CycleAction } from './actions'
 import { UPDATE_CYCLES } from './actionTypes'
 import differenceInDays from 'date-fns/differenceInDays'
 import startOfToday from 'date-fns/startOfToday'
 import { compareDesc } from 'date-fns'
 
-export const cycleReducer = (state: CycleState = defaultCycleState, action: CycleAction): CycleState => {
+export const cycleReducer = (state: CycleState, action: CycleAction): CycleState => {
   switch (action.type) {
     case UPDATE_CYCLES: {
       if (action.cycles.length > 0) {

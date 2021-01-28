@@ -8,3 +8,13 @@ export const defaultDatabaseState: DatabaseState = {
     },
   },
 }
+
+export const demoDatabaseState: DatabaseState = {
+  authState: {
+    type: 'logged-in',
+    user: {
+      type: 'demo',
+      username: 'there',
+    },
+  },
+}

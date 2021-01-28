@@ -54,7 +54,7 @@ export const LoginForm = ({ state }: Props) => {
         })
         .then((user: UserResult) => {
           console.debug('DB sign-in successful')
-          return dispatch(loginSuccessful(user))
+          return dispatch(loginSuccessful({ ...user, type: 'db' }))
         })
         .catch((e: string) => {
           console.debug('DB sign-in failed: ' + e)

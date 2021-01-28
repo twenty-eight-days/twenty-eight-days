@@ -1,4 +1,5 @@
 import { DatabaseState } from './model'
+import { demoUser } from './userbase'
 
 export const defaultDatabaseState: DatabaseState = {
   authState: {
@@ -12,9 +13,6 @@ export const defaultDatabaseState: DatabaseState = {
 export const demoDatabaseState: DatabaseState = {
   authState: {
     type: 'logged-in',
-    user: {
-      type: 'demo',
-      username: 'there',
-    },
+    user: demoUser,
   },
 }

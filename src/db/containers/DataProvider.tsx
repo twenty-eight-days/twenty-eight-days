@@ -1,10 +1,10 @@
 import { ReactElement, useEffect } from 'react'
 import { useTypedSelector } from '../../store'
-import userbase, { Item } from 'userbase-js'
 import { useDispatch } from 'react-redux'
 import { RawCycle, updateCycles } from '../../cycle'
 import { cycleDatabaseName } from '../actions'
 import { CycleId } from '../model'
+import { userbase, Item } from '../userbase'
 
 interface Props {
   children: ReactElement
@@ -14,7 +14,7 @@ export const DataProvider = ({ children }: Props) => {
   const loginState = useTypedSelector((s) => s.database.authState)
   const dispatch = useDispatch()
   useEffect(() => {
-    if (loginState.type === 'logged-in' && loginState.user.type === 'db') {
+    if (loginState.type === 'logged-in') {
       const databaseName = cycleDatabaseName(loginState)
       console.log(`DB openDatabase ${databaseName} ...`)
       userbase

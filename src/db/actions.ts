@@ -1,6 +1,6 @@
 import { UPDATE_AUTH_STATE } from './actionTypes'
-import { AuthState, CycleId, LoggedInUser, LoginFormField, LoginFormState, LoginState } from './model'
-import userbase from 'userbase-js'
+import { AuthState, LoginState, LoginFormState, CycleId, LoginFormField } from './model'
+import { userbase, UserResult } from './userbase'
 
 export type DatabaseAction = UpdateAuthStateAction
 
@@ -24,7 +24,7 @@ export const loginFormSubmitted = () => updateLoginForm({ type: 'login-form-subm
 export const loginFormError = (error: string, field: LoginFormField) =>
   updateLoginForm({ type: 'login-form-error', field, error })
 
-export const loginSuccessful = (user: LoggedInUser) =>
+export const loginSuccessful = (user: UserResult) =>
   updateAuthState({
     type: 'logged-in',
     user,

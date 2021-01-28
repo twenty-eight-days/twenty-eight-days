@@ -1,3 +1,5 @@
+import { UserResult } from 'userbase-js'
+
 /* ·················································································································· */
 /*  Redux State
 /* ·················································································································· */
@@ -31,14 +33,9 @@ export interface LoginFormError {
   error: string
 }
 
-export interface LoggedInUser {
-  readonly type: 'db' | 'demo'
-  readonly username: string
-}
-
 export interface LoginState {
   type: 'logged-in'
-  user: LoggedInUser
+  user: UserResult
 }
 
 export interface DbInitInProgress {

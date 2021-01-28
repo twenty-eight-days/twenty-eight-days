@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { LoginForm as LoginFormComponent } from '../components/LoginForm'
 import { useDispatch } from 'react-redux'
-import userbase, { UserResult } from 'userbase-js'
 import { loginFormError, loginFormSubmitted, loginSuccessful } from '../actions'
 import { LoginFormState } from '../model'
+import { userbase, UserResult } from '../userbase'
 
 interface Props {
   readonly state: LoginFormState
@@ -54,7 +54,7 @@ export const LoginForm = ({ state }: Props) => {
         })
         .then((user: UserResult) => {
           console.debug('DB sign-in successful')
-          return dispatch(loginSuccessful({ ...user, type: 'db' }))
+          return dispatch(loginSuccessful(user))
         })
         .catch((e: string) => {
           console.debug('DB sign-in failed: ' + e)

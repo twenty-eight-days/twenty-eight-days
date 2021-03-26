@@ -1,5 +1,5 @@
 import userbaseDB, { DatabaseChangeHandler, Item, Session, Userbase, UserResult } from 'userbase-js'
-import { parse } from 'date-fns'
+import { parse, differenceInDays, startOfToday, addDays } from 'date-fns'
 import { DATE_FORMAT_IMPORT_EXPORT } from '../cycle/utils'
 
 export type { Item, UserResult } from 'userbase-js'
@@ -97,10 +97,19 @@ const demoData = [
   '22.10.2019',
 ]
 
+const p = (demoDateString: string) => parse(demoDateString, DATE_FORMAT_IMPORT_EXPORT, new Date()).valueOf()
+
+// Auto-shift demo data to make sense today -> end up on day 9 of the cycle...
+const demoDataCreationDate = p('13.01.2021')
+const daysToAdd = differenceInDays(startOfToday(), demoDataCreationDate)
+
 export const userbase: UserbaseProxy = isDemoMode
   ? new DemoUserbase(
       demoData
-        .map<number>((d) => parse(d, DATE_FORMAT_IMPORT_EXPORT, new Date()).valueOf())
+        .map<number>((d) => {
+          const parsedDate = p(d)
+          return addDays(parsedDate, daysToAdd).valueOf()
+        })
         .sort((d1, d2) => d2 - d1)
         .map<Item>((startDate: number) => {
           return {

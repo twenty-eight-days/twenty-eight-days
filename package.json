@@ -1,7 +1,7 @@
 {
   "name": "twenty-eight-days",
   "version": "0.1.0",
-  "homepage": "https://twenty-eight-days.github.io/twenty-eight-days",
+  "homepage": ".",
   "scripts": {
     "build": "react-scripts build",
     "eject": "react-scripts eject",

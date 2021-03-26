@@ -1,5 +1,17 @@
 = 28 Days
 
+== Deployment To GitHub Pages
 
+----
+yarn deploy
+----
 
-&copy; Rahel Lüthy 2020 – link:LICENSE[MIT License]
+== Demo Mode
+
+Appending the `demo` string showcases the app with mock data:
+
+----
+http://localhost:3000?demo
+----
+
+&copy; Rahel Lüthy 2021 – link:LICENSE[MIT License]

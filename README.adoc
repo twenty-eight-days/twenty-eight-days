@@ -81,8 +81,10 @@ REACT_APP_USERBASE_PASSWORD=testtest
 
 === Deployment To GitHub Pages
 
-----
-yarn deploy
-----
+* Update version in `package.json`
+* `git tag v1.2.3`
+* `yarn deploy`
+* `git push`
+* `git push --tags`
 
 &copy; Rahel Lüthy 2021 – link:LICENSE[MIT License]

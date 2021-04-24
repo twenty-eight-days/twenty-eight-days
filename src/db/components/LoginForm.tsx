@@ -11,16 +11,17 @@ const useStyles = makeStyles((theme: Theme) => ({
     gridRowGap: theme.spacing(2),
   },
   button: {
-    minHeight: 24,
+    minHeight: 48,
   },
 }))
 
 interface Props {
-  state: LoginFormState
-  onSubmit: (appId: string, username: string, password: string) => void
+  readonly isSignUp: boolean
+  readonly state: LoginFormState
+  readonly onSubmit: (appId: string, username: string, password: string) => void
 }
 
-export const LoginForm = ({ state, onSubmit }: Props) => {
+export const LoginForm = ({ isSignUp, state, onSubmit }: Props) => {
   const classes = useStyles()
 
   const [appId, setAppId] = useState<string>(process.env.REACT_APP_USERBASE_APP_ID ?? '')
@@ -78,7 +79,7 @@ export const LoginForm = ({ state, onSubmit }: Props) => {
         variant={'contained'}
         color="primary"
       >
-        {isSubmitted ? <CircularProgress size={20} /> : 'Log In'}
+        {isSubmitted ? <CircularProgress size={20} /> : isSignUp ? 'Sign Up' : 'Log In'}
       </Button>
     </form>
   )

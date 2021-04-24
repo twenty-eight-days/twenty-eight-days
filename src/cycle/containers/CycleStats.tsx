@@ -6,6 +6,7 @@ import { useTypedSelector } from '../../store'
 import { CycleHistory } from '../model'
 import startOfToday from 'date-fns/startOfToday'
 import { differenceInDays } from 'date-fns'
+import { NotEnoughData } from '../components/NotEnoughData'
 
 export const medianCycleLength = (durations: ReadonlyArray<number>) => {
   const median = (values: ReadonlyArray<number>) => {
@@ -28,7 +29,7 @@ export const CycleStats = () => {
     const authState = s.database.authState
     return authState.type === 'logged-in' ? authState.user.username : ''
   })
-  if (history) {
+  if (history && history.pastCycles.length > 0) {
     const lastStartDate = history.currentCycle.startDate
     const median = medianCycleLength(history.pastCycles.map((c) => c.duration))
     const daysPast = differenceInDays(today, lastStartDate)
@@ -43,6 +44,6 @@ export const CycleStats = () => {
       />
     )
   } else {
-    return <div />
+    return <NotEnoughData />
   }
 }

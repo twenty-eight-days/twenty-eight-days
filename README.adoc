@@ -1,17 +1,88 @@
 = 28 Days
 
-== Deployment To GitHub Pages
+== Usage
 
-----
-yarn deploy
-----
+It is important to distinguish the *web app* from the *cycle data*.
 
-== Demo Mode
+The web app is publicly available (i.e. you don't have to deploy your own copy):
+
+https://twenty-eight-days.github.io/twenty-eight-days
+
+It can either be used in *demo mode*, where you can explore all features in action with mock data.
+
+Alternatively, you can use it to actually track your own personal data.
+This requires a *personal userbase account* to manage your encrypted cycle data.
+
+=== Demo Mode
 
 Appending the `demo` string showcases the app with mock data:
 
 ----
-http://localhost:3000?demo
+https://twenty-eight-days.github.io/twenty-eight-days?demo
+----
+
+=== Personal Userbase Account
+
+[WARNING]
+====
+The app is still in early alpha stage!
+On-boarding is very raw and only recommended for developers.
+While your data is always encrypted and will not leak, you might experience loss or corruption.
+====
+
+Your personal cycle data is hosted through userbase, a service providing encrypted databases.
+The starter plan is *free* and offers 1 app with 100 users, which is enough for our purpose.
+
+First, you need to https://v1.userbase.com/#create-admin[create an admin account].
+
+Userbase will create a https://v1.userbase.com/#app=Starter%20App[Starter App] for you.
+Copy the *App Id* to somewhere safe, it is needed to identify your database.
+
+Now that you have an `App Id`, you can add a new database user via the (very experimental!) sign-up form:
+
+* Open the form: https://twenty-eight-days.github.io/twenty-eight-days?signUp
+* Fill in credentials (password min 6 characters)
+* _In case of errors, check dev console for details_
+
+If the sign-up process is *successful*, your new user will already be signed in – you are all set and can start tracking your cycle data! ✨
+
+[TIP]
+====
+* You won't need the sign-up form again, so just use the https://twenty-eight-days.github.io/twenty-eight-days[plain URL] from now on
+* Users can be deleted via the userbase admin panel
+====
+
+== Development
+
+=== CRA
+
+This app is based on https://github.com/facebook/create-react-app[create-react-app], so the usual tooling is available:
+
+First time dependency installation:
+----
+yarn install
+----
+
+Auto-refreshing dev mode:
+----
+yarn start
+----
+
+=== .env.local
+
+Storing your credentials *locally* makes the log-in process less tedious:
+
+[title=.env.local]
+----
+REACT_APP_USERBASE_APP_ID=1234-abcd-1234-abcd-xyz
+REACT_APP_USERBASE_USERNAME=test
+REACT_APP_USERBASE_PASSWORD=testtest
+----
+
+=== Deployment To GitHub Pages
+
+----
+yarn deploy
 ----
 
 &copy; Rahel Lüthy 2021 – link:LICENSE[MIT License]

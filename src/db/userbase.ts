@@ -1,10 +1,14 @@
 import userbaseDB, { DatabaseChangeHandler, Item, Session, Userbase, UserResult } from 'userbase-js'
 import { parse, differenceInDays, startOfToday, addDays } from 'date-fns'
 import { DATE_FORMAT_IMPORT_EXPORT } from '../cycle/utils'
+import { DatabaseAction, loginFormError, loginSuccessful } from './actions'
 
 export type { Item, UserResult } from 'userbase-js'
 
-type UserbaseProxy = Pick<Userbase, 'init' | 'signIn' | 'signOut' | 'openDatabase' | 'insertItem' | 'deleteItem'>
+type UserbaseProxy = Pick<
+  Userbase,
+  'init' | 'signUp' | 'signIn' | 'signOut' | 'openDatabase' | 'insertItem' | 'deleteItem'
+>
 
 export const demoUser: UserResult = {
   username: 'demo-User',
@@ -24,6 +28,10 @@ class DemoUserbase implements UserbaseProxy {
 
   init(): Promise<Session> {
     return Promise.resolve({})
+  }
+
+  signUp(): Promise<UserResult> {
+    return Promise.resolve(demoUser)
   }
 
   signIn(): Promise<UserResult> {
@@ -119,3 +127,45 @@ export const userbase: UserbaseProxy = isDemoMode
         })
     )
   : userbaseDB
+
+export const signIn = (username: string, password: string): Promise<DatabaseAction> => {
+  console.debug('DB sign-in...')
+  return userbase
+    .signIn({
+      username,
+      password,
+    })
+    .then((user: UserResult) => {
+      console.debug('DB sign-in successful')
+      return loginSuccessful(user)
+    })
+    .catch((e: string) => {
+      console.debug('DB sign-in failed: ' + e)
+      if (e.toString().startsWith('AppIdNotValid')) {
+        return loginFormError('Invalid App Id', 'appId')
+      } else {
+        return loginFormError('Invalid Credentials', 'credentials')
+      }
+    })
+}
+
+export const signUp = (username: string, password: string): Promise<DatabaseAction> => {
+  console.debug('DB sign-up...')
+  return userbase
+    .signUp({
+      username,
+      password,
+    })
+    .then((user: UserResult) => {
+      console.debug('DB sign-up successful')
+      return loginSuccessful(user)
+    })
+    .catch((e: string) => {
+      console.debug('DB sign-up failed: ' + e)
+      if (e.toString().startsWith('AppIdNotValid')) {
+        return loginFormError('Invalid App Id', 'appId')
+      } else {
+        return loginFormError('Invalid Credentials', 'credentials')
+      }
+    })
+}

@@ -83,7 +83,7 @@ REACT_APP_USERBASE_PASSWORD=testtest
 
 * Update version in `package.json`
 * `git tag v1.2.3`
-* `yarn deploy`
+* `yarn deploy` (be aware of `.env.local`)
 * `git push`
 * `git push --tags`
 

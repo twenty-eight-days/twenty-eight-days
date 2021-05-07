@@ -20,7 +20,12 @@ const updateLoginForm = (state: LoginFormState) =>
     state,
   })
 
+export const dbInitFailed = (error: any) => updateAuthState({ type: 'db-init-failed', error })
+
+export const showLoginForm = () => updateLoginForm({ type: 'login-form-idle' })
+
 export const loginFormSubmitted = () => updateLoginForm({ type: 'login-form-submitted' })
+
 export const loginFormError = (error: string, field: LoginFormField) =>
   updateLoginForm({ type: 'login-form-error', field, error })
 

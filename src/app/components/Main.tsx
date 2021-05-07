@@ -6,6 +6,7 @@ import StatsIcon from '@material-ui/icons/TrendingUp'
 import DataIcon from '@material-ui/icons/Event'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import makeStyles from '@material-ui/core/styles/makeStyles'
+import { CircularProgress } from '@material-ui/core'
 
 const useStyles = makeStyles({
   bottomNav: {
@@ -13,6 +14,9 @@ const useStyles = makeStyles({
     position: 'fixed',
     bottom: 0,
     left: 0,
+  },
+  progress: {
+    justifySelf: 'center',
   },
 })
 
@@ -27,6 +31,8 @@ export const Main = ({ authState }: Props) => {
   const [navTab, setNavTab] = useState<Tab>('stats')
 
   switch (authState.type) {
+    case 'attempt-auto-login':
+      return <CircularProgress className={classes.progress} size={50} />
     case 'login-form':
       return <LoginForm state={authState.state} />
     case 'logged-in':

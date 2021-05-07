@@ -4,7 +4,7 @@ import { defaultCycleState } from '../cycle'
 import { defaultDatabaseState, demoDatabaseState, isDemoMode } from '../db'
 
 export const defaultRootState: RootState = {
-  database: isDemoMode ? demoDatabaseState : defaultDatabaseState,
+  database: isDemoMode ? demoDatabaseState : defaultDatabaseState(),
   theme: defaultThemeState,
   cycle: defaultCycleState,
 }

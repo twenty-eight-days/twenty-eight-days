@@ -8,7 +8,12 @@ export interface DatabaseState {
   readonly authState: AuthState
 }
 
-export type AuthState = DisplayLoginForm | DbInitInProgress | DbInitFailed | LoginState
+export type AuthState = AttemptAutoLogin | DisplayLoginForm | DbInitFailed | LoginState
+
+export interface AttemptAutoLogin {
+  type: 'attempt-auto-login'
+  appId: string
+}
 
 export interface DisplayLoginForm {
   type: 'login-form'
@@ -36,10 +41,6 @@ export interface LoginFormError {
 export interface LoginState {
   type: 'logged-in'
   user: UserResult
-}
-
-export interface DbInitInProgress {
-  type: 'db-init-in-progress'
 }
 
 export interface DbInitFailed {

@@ -2,9 +2,10 @@ import { ReactElement, useEffect } from 'react'
 import { useTypedSelector } from '../../store'
 import { useDispatch } from 'react-redux'
 import { RawCycle, updateCycles } from '../../cycle'
-import { cycleDatabaseName } from '../actions'
+import { cycleDatabaseName, dbInitFailed, loginSuccessful, showLoginForm } from '../actions'
 import { CycleId } from '../model'
-import { userbase, Item } from '../userbase'
+import { Item, userbase } from '../userbase'
+import { Session } from 'userbase-js'
 
 interface Props {
   children: ReactElement
@@ -13,8 +14,25 @@ interface Props {
 export const DataProvider = ({ children }: Props) => {
   const loginState = useTypedSelector((s) => s.database.authState)
   const dispatch = useDispatch()
+
   useEffect(() => {
-    if (loginState.type === 'logged-in') {
+    if (loginState.type === 'attempt-auto-login') {
+      console.debug('Attempting DB auto-login...')
+      userbase
+        .init({ appId: loginState.appId })
+        .then((session: Session) => {
+          if (session.user) {
+            console.debug('DB auto-login successful')
+            dispatch(loginSuccessful(session.user))
+          } else {
+            dispatch(showLoginForm())
+          }
+        })
+        .catch((error) => {
+          console.debug('DB init with auto-login failed: ' + error)
+          dispatch(dbInitFailed(error))
+        })
+    } else if (loginState.type === 'logged-in') {
       const databaseName = cycleDatabaseName(loginState)
       console.log(`DB openDatabase ${databaseName} ...`)
       userbase

@@ -4,13 +4,13 @@ import { useDispatch } from 'react-redux'
 import { loginFormError, loginFormSubmitted } from '../actions'
 import { LoginFormState } from '../model'
 import { signIn, signUp, userbase } from '../userbase'
+import { isSignUp } from '../default'
 
 interface Props {
   readonly state: LoginFormState
 }
 
 export const LoginForm = ({ state }: Props) => {
-  const isSignUp = new URLSearchParams(window.location.search).has('signUp')
   const [appId, setAppId] = useState<string>()
   const [isDbInitialized, setDbInitialized] = useState<boolean>(false)
   const [credentials, setCredentials] = useState<[string, string]>()
@@ -54,7 +54,7 @@ export const LoginForm = ({ state }: Props) => {
         signIn(username, password).then((action) => dispatch(action))
       }
     }
-  }, [isDbInitialized, isSignUp, credentials, dispatch])
+  }, [isDbInitialized, credentials, dispatch])
 
   return <LoginFormComponent isSignUp={isSignUp} state={state} onSubmit={onSubmit} />
 }

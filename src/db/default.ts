@@ -30,5 +30,6 @@ export const demoDatabaseState: DatabaseState = {
   authState: {
     type: 'logged-in',
     user: demoUser,
+    dataLoading: 'pending',
   },
 }

@@ -33,6 +33,21 @@ export const loginSuccessful = (user: UserResult) =>
   updateAuthState({
     type: 'logged-in',
     user,
+    dataLoading: 'pending',
+  })
+
+export const dataLoadingInProgress = (user: UserResult) =>
+  updateAuthState({
+    type: 'logged-in',
+    user,
+    dataLoading: 'in-progress',
+  })
+
+export const dataLoadingDone = (user: UserResult) =>
+  updateAuthState({
+    type: 'logged-in',
+    user,
+    dataLoading: 'done',
   })
 
 export const cycleDatabaseName = (loginState: LoginState) => `${loginState.user.username}-cycles-v1`

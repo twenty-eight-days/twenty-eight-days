@@ -6,7 +6,7 @@ import StatsIcon from '@material-ui/icons/TrendingUp'
 import DataIcon from '@material-ui/icons/Event'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import { CircularProgress } from '@material-ui/core'
+import { Progress } from './Progress'
 
 const useStyles = makeStyles({
   bottomNav: {
@@ -32,27 +32,31 @@ export const Main = ({ authState }: Props) => {
 
   switch (authState.type) {
     case 'attempt-auto-login':
-      return <CircularProgress className={classes.progress} size={50} />
+      return <Progress label={'Signing in'} />
     case 'login-form':
       return <LoginForm state={authState.state} />
     case 'logged-in':
-      return (
-        <div>
-          {navTab === 'stats' && <CycleStats />}
-          {navTab === 'data' && <CycleData loginState={authState} />}
-          <BottomNavigation
-            className={classes.bottomNav}
-            value={navTab}
-            onChange={(event, newValue) => {
-              setNavTab(newValue)
-            }}
-            showLabels={true}
-          >
-            <BottomNavigationAction label="Stats" icon={<StatsIcon />} value={'stats'} />
-            <BottomNavigationAction label="Data" icon={<DataIcon />} value={'data'} />
-          </BottomNavigation>
-        </div>
-      )
+      if (authState.dataLoading !== 'done') {
+        return <Progress label={'Loading data'} />
+      } else {
+        return (
+          <div>
+            {navTab === 'stats' && <CycleStats />}
+            {navTab === 'data' && <CycleData loginState={authState} />}
+            <BottomNavigation
+              className={classes.bottomNav}
+              value={navTab}
+              onChange={(event, newValue) => {
+                setNavTab(newValue)
+              }}
+              showLabels={true}
+            >
+              <BottomNavigationAction label="Stats" icon={<StatsIcon />} value={'stats'} />
+              <BottomNavigationAction label="Data" icon={<DataIcon />} value={'data'} />
+            </BottomNavigation>
+          </div>
+        )
+      }
     default:
       return <div />
   }

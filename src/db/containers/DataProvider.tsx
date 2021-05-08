@@ -2,7 +2,14 @@ import { ReactElement, useEffect } from 'react'
 import { useTypedSelector } from '../../store'
 import { useDispatch } from 'react-redux'
 import { RawCycle, updateCycles } from '../../cycle'
-import { cycleDatabaseName, dbInitFailed, loginSuccessful, showLoginForm } from '../actions'
+import {
+  cycleDatabaseName,
+  dataLoadingDone,
+  dataLoadingInProgress,
+  dbInitFailed,
+  loginSuccessful,
+  showLoginForm,
+} from '../actions'
 import { CycleId } from '../model'
 import { Item, userbase } from '../userbase'
 import { Session } from 'userbase-js'
@@ -32,9 +39,10 @@ export const DataProvider = ({ children }: Props) => {
           console.debug('DB init with auto-login failed: ' + error)
           dispatch(dbInitFailed(error))
         })
-    } else if (loginState.type === 'logged-in') {
+    } else if (loginState.type === 'logged-in' && loginState.dataLoading === 'pending') {
       const databaseName = cycleDatabaseName(loginState)
       console.log(`DB openDatabase ${databaseName} ...`)
+      dispatch(dataLoadingInProgress(loginState.user))
       userbase
         .openDatabase({
           databaseName,
@@ -44,12 +52,16 @@ export const DataProvider = ({ children }: Props) => {
               startDate: i.item,
             }))
             dispatch(updateCycles(startDates))
+            dispatch(dataLoadingDone(loginState.user))
           },
         })
         .then(() => {
           console.log(`DB openDatabase ${databaseName} successful`)
         })
-        .catch((err) => console.log(`DB openDatabase ${databaseName} failed ${err}`))
+        .catch((err) => {
+          console.log(`DB openDatabase ${databaseName} failed ${err}`)
+          dispatch(dataLoadingDone(loginState.user))
+        })
     }
   }, [loginState, dispatch])
 

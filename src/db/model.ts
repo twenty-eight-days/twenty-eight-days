@@ -41,6 +41,7 @@ export interface LoginFormError {
 export interface LoginState {
   type: 'logged-in'
   user: UserResult
+  dataLoading: 'pending' | 'in-progress' | 'done'
 }
 
 export interface DbInitFailed {

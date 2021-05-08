@@ -38,7 +38,7 @@ First, you need to https://v1.userbase.com/#create-admin[create an admin account
 Userbase will create a https://v1.userbase.com/#app=Starter%20App[Starter App] for you.
 Copy the *App Id* to somewhere safe, it is needed to identify your database.
 
-Now that you have an `App Id`, you can add a new database user via the (very experimental!) sign-up form:
+Now that you have an id, you can add a new database user via the (very experimental!) sign-up form:
 
 * Open the form: https://twenty-eight-days.github.io/twenty-eight-days?signUp
 * Fill in credentials (password min 6 characters)
@@ -50,6 +50,34 @@ If the sign-up process is *successful*, your new user will already be signed in 
 ====
 * You won't need the sign-up form again, so just use the https://twenty-eight-days.github.io/twenty-eight-days[plain URL] from now on
 * Users can be deleted via the userbase admin panel
+====
+
+==== Auto-Login
+
+Having to fill in the login form for every usage of the app can be tedious.
+There are two options to minimize this hassle:
+
+In *production*, you can pass your `appId` as a query string:
+
+----
+https://twenty-eight-days.github.io/twenty-eight-days?appId=1234-abcd-1234-abcd-xyz
+----
+
+This will allow the app to perform an auto-login with your previously used username/password.
+
+During *development*, you can store your credentials *locally*, in an `.env.local` file placed in the project root:
+
+[title=.env.local]
+----
+REACT_APP_USERBASE_APP_ID=1234-abcd-1234-abcd-xyz
+REACT_APP_USERBASE_USERNAME=test
+REACT_APP_USERBASE_PASSWORD=testtest
+----
+
+[WARNING]
+====
+* Obviously, you shouldn't commit this file to VCS (it is listed in `.gitignore`)
+* Clear this file before triggering a deployment from your local machine
 ====
 
 == Development
@@ -66,17 +94,6 @@ yarn install
 Auto-refreshing dev mode:
 ----
 yarn start
-----
-
-=== .env.local
-
-Storing your credentials *locally* makes the log-in process less tedious:
-
-[title=.env.local]
-----
-REACT_APP_USERBASE_APP_ID=1234-abcd-1234-abcd-xyz
-REACT_APP_USERBASE_USERNAME=test
-REACT_APP_USERBASE_PASSWORD=testtest
 ----
 
 === Deployment To GitHub Pages

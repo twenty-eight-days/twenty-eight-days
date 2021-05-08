@@ -1,6 +1,6 @@
 {
   "name": "twenty-eight-days",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "homepage": ".",
   "scripts": {
     "build": "react-scripts build",

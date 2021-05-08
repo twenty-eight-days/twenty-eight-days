@@ -1,8 +1,10 @@
 import { DatabaseState } from './model'
 import { demoUser } from './userbase'
 
-export const isSignUp = new URLSearchParams(window.location.search).has('signUp')
-const appId = process.env.REACT_APP_USERBASE_APP_ID
+const query = new URLSearchParams(window.location.search)
+export const isSignUp = query.has('signUp')
+
+const appId = query.get('appId') || process.env.REACT_APP_USERBASE_APP_ID
 
 export const defaultDatabaseState = (): DatabaseState => {
   if (!isSignUp && appId) {

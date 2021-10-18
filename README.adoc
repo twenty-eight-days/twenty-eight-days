@@ -1,21 +1,16 @@
 = 28 Days
 
-== Usage
+A React web application which tracks & visualizes cycle data.
 
-It is important to distinguish the *web app* from the *cycle data*.
+All data is stored via https://userbase.com/[Userbase], a secure persistence service.
+To use the app with your private cycle data, you thus need a userbase account (instructions below).
 
-The web app is publicly available (i.e. you don't have to deploy your own copy):
+The web application itself then manages & displays your cycle data.
+It is publicly available (i.e. you don't have to deploy your own copy):
 
 https://twenty-eight-days.github.io/twenty-eight-days
 
-It can either be used in *demo mode*, where you can explore all features in action with mock data.
-
-Alternatively, you can use it to actually track your own personal data.
-This requires a *personal userbase account* to manage your encrypted cycle data.
-
-=== Demo Mode
-
-Appending the `demo` string showcases the app with mock data:
+If you just want to have a look at some mock data, there's a *demo mode*:
 
 ----
 https://twenty-eight-days.github.io/twenty-eight-days?demo

@@ -12,9 +12,7 @@ https://twenty-eight-days.github.io/twenty-eight-days
 
 If you just want to have a look at some mock data, there's a *demo mode*:
 
-----
 https://twenty-eight-days.github.io/twenty-eight-days?demo
-----
 
 === Personal Userbase Account
 
